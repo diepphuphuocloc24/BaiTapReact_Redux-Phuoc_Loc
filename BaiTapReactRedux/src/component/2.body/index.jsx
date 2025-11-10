@@ -1,19 +1,30 @@
-import React, { useState } from 'react';
-import ListSeats from './ListSeats';
-import { useSelector } from 'react-redux'
+import React, { useState } from "react";
+import ListSeats from "./ListSeats";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    addFoodToCart,
+    decreaseFoodInCart,
+    removeFoodFromCart,
+    resetFoodCart,
+    selectFoodList,
+    selectFoodCart,
+} from "./../foodSlice";
+import { setArraySeat, resetSeatsCart } from "./../slice";
 
 const BodyComponent = () => {
-    const [arrayCart, setArrayCart] = useState([])
+    const dispatch = useDispatch();
 
-    const data = useSelector((state) => {
-        return state.seatsBookingReducer
-    })
+    // Redux seats
+    const seatData = useSelector((state) => state.seatsBookingReducer);
+    const { seatsList, arrayCart } = seatData;
 
-    const { seatsList } = data;
+    // Redux food
+    const foodList = useSelector(selectFoodList);
+    const foodCart = useSelector(selectFoodCart);
 
+    // Lấy thông tin từ seat để đưa lên store
     const getInforFromListSeats = (selectedSeat) => {
-        console.log(selectedSeat);
-        addToArrayCart(selectedSeat)
+        dispatch(setArraySeat(selectedSeat));
     };
 
     const renderDataSeats = () => {
@@ -24,184 +35,128 @@ const BodyComponent = () => {
                     onSelectedSeats={getInforFromListSeats}
                 />
             </div>
-        )
+        );
     };
 
-    // Find index cho cái seat
-    const findIndexSeat = (hang) => {
-        return arrayCart.findIndex((seat) => {
-            return seat.hang === hang
-        });
-    };
-
-    const addToArrayCart = (selectedSeat) => {
-        const index = findIndexSeat(selectedSeat.hang);
-
-        const new_ArrayCart = [...arrayCart];
-
-        new_ArrayCart.push(selectedSeat);
-
-        setArrayCart(new_ArrayCart);
-    };
-
-    console.log(arrayCart);
-
-    const renderCart = () => {
+    const renderSeatCart = () => {
         return arrayCart.map((seat) => {
             return (
                 <div>
                     <div className="flex justify-between items-center px-4 py-2 bg-white border border-gray-300 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
-                        <div className="text-gray-900 font-bold text-lg">
-                            {seat.soGhe}
-                        </div>
+                        <div className="text-gray-900 font-bold text-lg">{seat.soGhe}</div>
 
                         <div className="text-red-600 font-extrabold text-lg">
-                            {seat.gia.toLocaleString('vi-VN')}₫
+                            {seat.gia.toLocaleString("vi-VN")}₫
                         </div>
                     </div>
                 </div>
-            )
-        })
-    }
-
-    const [foodList, setfoodList] = useState([
-        { name: "Combo", price: 150000, quantity: 0, img: "./img/combo.jpg" },
-        { name: "Lẻ bắp", price: 70000, quantity: 0, img: "./img/popcorn.webp" },
-        { name: "Lẻ nước", price: 50000, quantity: 0, img: "./img/drink.jpg" },
-    ]);
-
-    const renderFoodList = () => {
-        return foodList.map((food) => {
-            return (
-                <div className="flex items-center gap-4 mb-4 p-3 bg-gray-800 rounded-lg transition-all duration-300">
-                    <img src={food.img} alt={food.name} className="w-20 h-20 rounded-lg object-cover" />
-                    <div className="flex-1">
-                        <h3 className="text-white text-lg font-bold">{food.name}</h3>
-                        <div className="flex items-center justify-between mt-2">
-                            <div className="flex items-center gap-2">
-                                <button className="w-8 h-8 bg-amber-400 text-gray-800 rounded-md flex items-center justify-center hover:bg-amber-500 transition-all cursor-pointer"
-                                    onClick={() => handleQuantity(food.name, false)}
-                                >-</button>
-                                <span className="w-8 h-8 bg-white text-black flex items-center justify-center font-bold rounded-md">{food.quantity}</span>
-                                <button className="w-8 h-8 bg-amber-400 text-gray-800 rounded-md flex items-center justify-center hover:bg-amber-500 transition-all cursor-pointer"
-                                    onClick={() => handleQuantity(food.name, true)}
-                                >+</button>
-                            </div>
-                            <h5 className="text-white font-bold">{food.price}đ</h5>
-                        </div>
-                    </div>
-                </div>
-            )
-        })
-
-    }
-
-    const [foodCart, setFoodCart] = useState([]);
-
-    // Tìm vị trí món trong giỏ
-    const findIndexFood = (name) => {
-        return foodCart.findIndex((food) => {
-            return food.name === name
+            );
         });
     };
 
-    // Hàm xử lý tăng/giảm số lượng
-    const handleQuantity = (name, status) => {
-        const index = findIndexFood(name);
-        const newFoodCart = [...foodCart];
-        const newFoodList = [...foodList]; // 👈 thêm dòng này
-
-        if (status) {
-            // Nếu bấm "+"
-            if (index !== -1) {
-                newFoodCart[index].quantity += 1;
-            } else {
-                const food = foodList.find((f) => f.name === name);
-                if (food) {
-                    newFoodCart.push({ ...food, quantity: 1 });
-                }
-            }
-
-            // Cập nhật quantity trong foodList
-            const foodIndexInList = newFoodList.findIndex(f => f.name === name);
-            if (foodIndexInList !== -1) {
-                newFoodList[foodIndexInList].quantity += 1;
-            }
+    // FOOD
+    const handleQuantity = (foodName, isIncrease) => {
+        if (isIncrease) {
+            dispatch(addFoodToCart(foodName));
         } else {
-            // Nếu bấm "-"
-            if (index !== -1) {
-                newFoodCart[index].quantity -= 1;
-                if (newFoodCart[index].quantity <= 0) {
-                    newFoodCart.splice(index, 1);
-                }
-            }
-
-            // Giảm quantity trong foodList
-            const foodIndexInList = newFoodList.findIndex(f => f.name === name);
-            if (foodIndexInList !== -1 && newFoodList[foodIndexInList].quantity > 0) {
-                newFoodList[foodIndexInList].quantity -= 1;
-            }
+            dispatch(decreaseFoodInCart(foodName));
         }
+    };
 
-        setFoodCart(newFoodCart);
-        setfoodList(newFoodList);
+    const handleRemoveFood = (foodName) => {
+        dispatch(removeFoodFromCart(foodName));
+    };
+
+    const renderFoodList = () => {
+        return foodList.map((food) => (
+            <div
+                key={food.name}
+                className="flex items-center gap-4 mb-4 p-3 bg-gray-800 rounded-lg"
+            >
+                <img
+                    src={food.img}
+                    alt={food.name}
+                    className="w-20 h-20 rounded-lg object-cover"
+                />
+                <div className="flex-1">
+                    <h3 className="text-white text-lg font-bold">{food.name}</h3>
+                    <div className="flex items-center justify-between mt-2">
+                        <div className="flex items-center gap-2">
+                            <button
+                                className="w-8 h-8 bg-amber-400 text-gray-800 rounded-md cursor-pointer"
+                                onClick={() => handleQuantity(food.name, false)}
+                            >
+                                -
+                            </button>
+                            <span className="w-8 h-8 bg-white text-black flex items-center justify-center font-bold rounded-md">
+                                {food.quantity}
+                            </span>
+                            <button
+                                className="w-8 h-8 bg-amber-400 text-gray-800 rounded-md cursor-pointer"
+                                onClick={() => handleQuantity(food.name, true)}
+                            >
+                                +
+                            </button>
+                        </div>
+                        <h5 className="text-white text-xl font-bold">
+                            {food.price.toLocaleString()}đ
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        ));
     };
 
     const renderFoodCart = () => {
-        return foodCart.map((food) => {
-            return (
-                <div>
-                    <div className="flex justify-between items-center px-4 py-2 bg-white border border-gray-300 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200">
-                        <div className="text-gray-900 font-bold text-lg">
-                            {food.name}
-                        </div>
-
-                        <div className="flex items-center gap-2 bg-gray-200 px-3 py-1 rounded-md">
-                            <span className="text-gray-800 font-semibold text-md">
-                                Số lượng:
-                            </span>
-                            <span className="text-blue-600 font-bold text-md">
-                                {food.quantity}
-                            </span>
-                        </div>
-
-                        <div className="text-red-600 font-extrabold text-lg">
-                            {food.price.toLocaleString('vi-VN')}₫
-                        </div>
-                    </div>
+        return foodCart.map((food) => (
+            <div
+                key={food.name}
+                className="flex justify-between items-center px-4 py-2 bg-white border border-gray-300 rounded-xl"
+            >
+                <div className="text-gray-900 font-bold text-lg">{food.name}</div>
+                <div className="flex items-center gap-2">
+                    <span className="text-gray-800 font-semibold">Số lượng:</span>
+                    <span className="text-blue-600 font-bold">{food.quantity}</span>
                 </div>
-            )
-        })
-    }
+                <div className="text-red-600 font-extrabold text-lg">
+                    {(food.price * food.quantity).toLocaleString("vi-VN")}₫
+                </div>
+            </div>
+        ));
+    };
 
+    // TÍNH TIỀN VÉ
     const calculateTotalPriceSeat = () => {
         return arrayCart.reduce((totalPrice, seat) => {
-            return totalPrice + seat.gia
+            return totalPrice + seat.gia;
         }, 0);
     };
 
+    // TÍNH TIỀN ĐỒ ĂN
     const calculateTotalPriceFood = () => {
         return foodCart.reduce((totalPrice, food) => {
-            return totalPrice + food.price * food.quantity
+            return totalPrice + food.price * food.quantity;
         }, 0);
     };
 
+    // TÔNG TIỀN
     const calculateTotalPrice = () => {
         return calculateTotalPriceSeat() + calculateTotalPriceFood();
     };
 
     const handleCancel = () => {
-        setArrayCart([])
-        setFoodCart([])
-    }
+        dispatch(resetFoodCart());
+        dispatch(resetSeatsCart());
+    };
 
     const handleCheckOut = () => {
-        setArrayCart([])
-        setFoodCart([])
-    }
+        dispatch(resetFoodCart());
+        dispatch(resetSeatsCart());
+        alert("Thanh toán thành công. Cảm ơn bạn đã lựa chọn rạp FerLOCine!");
+    };
 
     return (
-        <div>
+        <>
             <section className="w-[75%] mx-auto pt-10">
                 <div className="flex flex-col gap-10">
                     {/* THÔNG TIN PHIM */}
@@ -250,7 +205,11 @@ const BodyComponent = () => {
                             Nội Dung Phim
                         </h2>
                         <p className="text-gray-800 leading-relaxed text-lg">
-                            Trong tương lai, tại một hành tinh hẻo lánh, một Predator non nớt - kẻ bị chính tộc của mình ruồng bỏ - tìm thấy một đồng minh không ngờ tới là Thia và bắt đầu hành trình sinh tử nhằm truy tìm kẻ thù tối thượng. Bộ phim do Dan Trachtenberg - đạo diễn của Prey chỉ đạo và nằm trong chuỗi thương hiệu Quái Thú Vô Hình Predator.
+                            Trong tương lai, tại một hành tinh hẻo lánh, một Predator non nớt
+                            - kẻ bị chính tộc của mình ruồng bỏ - tìm thấy một đồng minh không
+                            ngờ tới là Thia và bắt đầu hành trình sinh tử nhằm truy tìm kẻ thù
+                            tối thượng. Bộ phim do Dan Trachtenberg - đạo diễn của Prey chỉ
+                            đạo và nằm trong chuỗi thương hiệu Quái Thú Vô Hình Predator.
                         </p>
                     </div>
 
@@ -300,7 +259,9 @@ const BodyComponent = () => {
                                             EXIT
                                         </div>
                                         <div className="w-16 h-[500px] bg-gray-800 flex items-center justify-center rounded-md">
-                                            <span className="text-sm rotate-90 text-white">Lối vào</span>
+                                            <span className="text-sm rotate-90 text-white">
+                                                Lối vào
+                                            </span>
                                         </div>
                                     </div>
 
@@ -325,36 +286,50 @@ const BodyComponent = () => {
                                             EXIT
                                         </div>
                                         <div className="w-16 h-[500px] bg-gray-800 flex items-center justify-center rounded-md">
-                                            <span className="text-sm -rotate-90 text-white">Lối vào</span>
+                                            <span className="text-sm -rotate-90 text-white">
+                                                Lối vào
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className='mt-5'>
+                                <div className="mt-5">
                                     <p className="text-black font-bold italic text-center ">
-                                        Xin lưu ý rằng hệ thống không cho phép bạn để một ghế trống đơn lẻ giữa các ghế được chọn.
+                                        Xin lưu ý rằng hệ thống không cho phép bạn để một ghế trống
+                                        đơn lẻ giữa các ghế được chọn.
+                                    </p>
+                                    <p className="text-black font-bold italic text-center ">
+                                        Ghế Couple bắt buộc đặt cả 2 ghế.
                                     </p>
                                 </div>
 
                                 <div className="flex justify-center items-center gap-12 my-5">
                                     <div className="flex items-center gap-2">
                                         <i className="fa-solid fa-couch text-gray-500 text-lg"></i>
-                                        <span className="text-black font-bold text-sm">Standard</span>
+                                        <span className="text-black font-bold text-sm">
+                                            Standard
+                                        </span>
                                     </div>
 
                                     <div className="flex items-center gap-2">
                                         <i className="fa-solid fa-couch text-lime-500 text-lg"></i>
-                                        <span className="text-black font-bold text-sm">Ghế bạn chọn</span>
+                                        <span className="text-black font-bold text-sm">
+                                            Ghế bạn chọn
+                                        </span>
                                     </div>
 
                                     <div className="flex items-center gap-2">
                                         <i className="fa-solid fa-couch text-amber-400 text-lg"></i>
-                                        <span className="text-black font-bold text-sm">Ghế VIP</span>
+                                        <span className="text-black font-bold text-sm">
+                                            Ghế VIP
+                                        </span>
                                     </div>
 
                                     <div className="flex items-center gap-2">
                                         <i className="fa-solid fa-couch text-pink-600 text-lg"></i>
-                                        <span className="text-black font-bold text-sm">Ghế Couple</span>
+                                        <span className="text-black font-bold text-sm">
+                                            Ghế Couple
+                                        </span>
                                     </div>
 
                                     <div className="flex items-center gap-2">
@@ -366,14 +341,13 @@ const BodyComponent = () => {
                         </div>
 
                         {/* MÓN ĂN KÈM VÀ BILL */}
-                        <div className='flex justify-between items-stretch gap-5'>
+                        <div className="flex justify-between items-stretch gap-5">
                             <div className="flex-1 flex flex-col bg-gray-200 p-6 rounded-xl shadow-lg">
                                 <h3 className="flex items-center gap-3 text-gray-800 text-3xl font-bold">
                                     <span className="w-10 h-10 flex items-center justify-center rounded-full bg-amber-400 border-2 border-black text-black font-bold">
                                         2
                                     </span>
-                                    Đồ ăn & thức uống<span className='text-xl'>(Tùy chọn)
-                                    </span>
+                                    Đồ ăn & thức uống<span className="text-xl">(Tùy chọn)</span>
                                 </h3>
 
                                 <div className="bg-gray-900 p-4 mt-4 rounded-2xl shadow-lg">
@@ -391,18 +365,21 @@ const BodyComponent = () => {
 
                                 {/* BILL TÍNH TIỀN */}
                                 <div className="flex flex-col gap-4 p-4 bg-gray-100 rounded-lg shadow-md mt-4">
-
                                     {/* Ghế đã chọn */}
                                     <div className="flex flex-col border p-3 rounded-lg bg-white">
-                                        <div className="font-semibold text-gray-700 mb-2">Ghế đã chọn</div>
+                                        <div className="font-semibold text-gray-700 mb-2">
+                                            Ghế đã chọn
+                                        </div>
                                         <div className="flex flex-col gap-2 text-black h-20 max-h-20 overflow-y-auto">
-                                            {renderCart()}
+                                            {renderSeatCart()}
                                         </div>
                                     </div>
 
                                     {/* Đồ ăn & thức uống */}
                                     <div className="flex flex-col border p-3 rounded-lg bg-white">
-                                        <div className="font-semibold text-gray-700 mb-2">Đồ ăn & thức uống</div>
+                                        <div className="font-semibold text-gray-700 mb-2">
+                                            Đồ ăn & thức uống
+                                        </div>
                                         <div className="flex flex-col gap-2 text-black h-20 max-h-20 overflow-y-auto">
                                             {renderFoodCart()}
                                         </div>
@@ -415,9 +392,7 @@ const BodyComponent = () => {
                                             {calculateTotalPrice().toLocaleString()}₫
                                         </span>
                                     </div>
-
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -425,28 +400,28 @@ const BodyComponent = () => {
             </section>
 
             <div className="w-[75%] mx-auto flex justify-between items-center gap-5 py-5">
-                <div className='flex-1'>
-
-                </div>
-                <div className='flex-1'>
-                    <div className='flex justify-between items-center'>
+                <div className="flex-1"></div>
+                <div className="flex-1">
+                    <div className="flex justify-between items-center">
                         <button
                             className="text-white text-lg font-semibold hover:scale-105 transition-all duration-300 cursor-pointer"
-                            onClick={() => handleCancel()}>
+                            onClick={handleCancel}
+                        >
                             HỦY ĐẶT VÉ
                         </button>
 
                         <button
                             className="bg-linear-to-r from-indigo-500 to-purple-500 text-white text-base font-semibold px-5 py-2 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 cursor-pointer"
-                            onClick={() => handleCheckOut()}>
+                            onClick={handleCheckOut}
+                        >
                             Thanh toán
                             <i className="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
-    )
-}
+        </>
+    );
+};
 
-export default BodyComponent
+export default BodyComponent;

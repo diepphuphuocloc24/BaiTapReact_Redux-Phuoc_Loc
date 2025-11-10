@@ -13,11 +13,23 @@ const FooterComponent = () => {
                         </p>
 
                         <div className="flex items-center gap-4 mt-4">
-                            <a href="#" className="text-blue-600 hover:text-blue-800 transition"><i className="fa-brands fa-facebook-f text-xl" /></a>
-                            <a href="#" className="text-pink-400 hover:text-rose-400 transition"><i className="fa-brands fa-instagram text-xl" /></a>
-                            <a href="#" className="text-green-400 hover:text-emerald-400 transition"><i className="fa-brands fa-tiktok text-xl" /></a>
-                            <a href="#" className="text-red-600 hover:text-red-800 transition"><i className="fa-brands fa-youtube text-xl" /></a>
+                            <a href="#" className="transition transform hover:scale-110">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Facebook_logo_%28square%29.png/960px-Facebook_logo_%28square%29.png" alt="Facebook" className="h-6" />
+                            </a>
+
+                            <a href="#" className="transition transform hover:scale-110">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" className="h-6" />
+                            </a>
+
+                            <a href="#" className="transition transform hover:scale-110">
+                                <img src="https://img.freepik.com/vector-cao-cap/logo-tik-tok_578229-290.jpg?semt=ais_hybrid&w=740&q=80" alt="TikTok" className="h-6" />
+                            </a>
+
+                            <a href="#" className="transition transform hover:scale-110">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" alt="YouTube" className="h-6" />
+                            </a>
                         </div>
+
                     </div>
 
                     <div className="flex-1">

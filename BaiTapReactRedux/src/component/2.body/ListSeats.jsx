@@ -171,7 +171,7 @@ const ListSeats = ({ propSeats, onSelectedSeats }) => {
   };
 
   return (
-    <div>
+    <>
       <h2 className="text-center text-2xl font-bold mb-3 text-black tracking-wide">
         Khu vực chọn ghế
       </h2>
@@ -181,7 +181,7 @@ const ListSeats = ({ propSeats, onSelectedSeats }) => {
 
         <div className="flex flex-col gap-1.5">{renderColumnSeats()}</div>
       </div>
-    </div>
+    </>
   );
 };
 
