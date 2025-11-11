@@ -75,3 +75,8 @@
     width: 45px;
     height: 35px;
 }
+
+/* ANIMATE */
+:root {
+    --animate-duration: 2s;
+}

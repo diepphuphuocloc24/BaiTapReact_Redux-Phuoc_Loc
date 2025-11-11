@@ -5,7 +5,7 @@ import FooterComponent from './3.footer/FooterComponent'
 
 const MainTemplate = () => {
     return (
-        <div className="bg-black text-gray-200 font-sans">
+        <div className="bg-black text-gray-200 font-sans animate__animated animate__fadeIn">
             <HeaderComponent />
             <BodyComponent />
             <FooterComponent />
