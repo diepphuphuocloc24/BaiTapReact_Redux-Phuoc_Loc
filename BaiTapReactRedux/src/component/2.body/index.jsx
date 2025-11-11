@@ -399,7 +399,7 @@ const BodyComponent = () => {
                 </div>
             </section>
 
-            <div className="w-[75%] mx-auto flex justify-between items-center gap-5 py-5">
+            <section className="w-[75%] mx-auto flex justify-between items-center gap-5 py-5">
                 <div className="flex-1"></div>
                 <div className="flex-1">
                     <div className="flex justify-between items-center">
@@ -419,7 +419,127 @@ const BodyComponent = () => {
                         </button>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            {/* COMMENT FACEBOOK */}
+            <section className="w-[50%] mx-auto flex justify-center py-5">
+                <div className="w-full bg-white rounded-2xl shadow-lg p-6">
+                    <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">Bình luận</h2>
+
+                    {/* New comment input */}
+                    <div className="flex gap-3 items-start mb-6">
+                        <img
+                            src="./img/avar6.webp"
+                            alt="avatar"
+                            className="w-12 h-12 rounded-full border"
+                        />
+                        <div className="flex-1">
+                            <textarea
+                                rows={2}
+                                className="w-full text-sm text-gray-800 resize-none border border-gray-300 rounded-2xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm"
+                                placeholder="Viết bình luận...">
+                                FLop quá thì ghi tên anh vào
+                            </textarea>
+                            <div className="flex items-center justify-between mt-3">
+                                <div className="flex items-center gap-3 text-sm text-gray-500">
+                                    <button className="flex items-center gap-2 px-3 py-1 rounded-full hover:bg-gray-100 transition">📷 <span>Ảnh</span></button>
+                                    <button className="flex items-center gap-2 px-3 py-1 rounded-full hover:bg-gray-100 transition">👽 <span>Emoji</span></button>
+                                </div>
+                                <button className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-emerald-700 transition cursor-pointer">
+                                    Đăng bình luận
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr className="my-4 border-gray-200" />
+
+                    {/* Comments list */}
+                    <ul className="space-y-5">
+                        {/* Comment 1 */}
+                        <li className="flex gap-3">
+                            <img src="./img/avar4.jpg" alt="avatar" className="w-12 h-12 rounded-full border" />
+                            <div className="flex-1">
+                                <div className="bg-gray-100 rounded-2xl p-3 shadow-sm">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-semibold text-sm text-gray-800">Nguyễn Văn A</span>
+                                            <span className="text-xs text-gray-500">· 1 giờ</span>
+                                        </div>
+                                        <button className="text-gray-400 hover:text-gray-600 text-sm">•••</button>
+                                    </div>
+                                    <p className="mt-2 text-sm text-gray-800">
+                                        Coi xong tôi ra sân sau tưới cây mà cứ tưởng Predator đang bật chế độ tàng hình rình mình 😭🌿.
+                                        Phim này mà xem buổi tối chắc khỏi ngủ luôn!
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                                    <button className="flex items-center gap-1 hover:text-red-500">
+                                        <i className="fa-solid fa-heart text-red-500"></i> Thích
+                                    </button>
+                                    <button className="hover:text-gray-700">Chia sẻ</button>
+                                    <span className="ml-auto text-xs text-gray-400">54 lượt tym</span>
+                                </div>
+                            </div>
+                        </li>
+
+                        {/* Comment 2 */}
+                        <li className="flex gap-3">
+                            <img src="./img/avar3.jpg" alt="avatar" className="w-12 h-12 rounded-full border" />
+                            <div className="flex-1">
+                                <div className="bg-gray-100 rounded-2xl p-3 shadow-sm">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-semibold text-sm text-gray-800">Trần Thị B</span>
+                                            <span className="text-xs text-gray-500">· 2 giờ</span>
+                                        </div>
+                                        <button className="text-gray-400 hover:text-gray-600 text-sm">•••</button>
+                                    </div>
+                                    <p className="mt-2 text-sm text-gray-800">
+                                        Predator mà đi hẹn hò chắc chỉ chọn nhà hàng... trong rừng 😆🌲.
+                                        Nhưng công nhận phim cháy thật, hiệu ứng nhìn sướng mắt luôn!
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                                    <button className="flex items-center gap-1 hover:text-red-500">
+                                        <i className="fa-solid fa-heart text-red-500"></i> Thích
+                                    </button>
+                                    <button className="hover:text-gray-700">Chia sẻ</button>
+                                    <span className="ml-auto text-xs text-gray-400">39 lượt tym</span>
+                                </div>
+                            </div>
+                        </li>
+
+                        {/* Comment 3 */}
+                        <li className="flex gap-3">
+                            <img src="./img/avar5.webp" alt="avatar" className="w-12 h-12 rounded-full border" />
+                            <div className="flex-1">
+                                <div className="bg-gray-100 rounded-2xl p-3 shadow-sm">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-semibold text-sm text-gray-800">Lê Minh C</span>
+                                            <span className="text-xs text-gray-500">· 5 giờ</span>
+                                        </div>
+                                        <button className="text-gray-400 hover:text-gray-600 text-sm">•••</button>
+                                    </div>
+                                    <p className="mt-2 text-sm text-gray-800">
+                                        Tôi mà gặp Predator ngoài đời chắc không chạy, mà xin selfie một tấm cho viral TikTok luôn 🤳👽🔥.
+                                        Phim này đúng kiểu “chạy là thua” luôn rồi!
+                                    </p>
+                                </div>
+                                <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                                    <button className="flex items-center gap-1 hover:text-red-500">
+                                        <i className="fa-solid fa-heart text-red-500"></i> Thích
+                                    </button>
+                                    <button className="hover:text-gray-700">Chia sẻ</button>
+                                    <span className="ml-auto text-xs text-gray-400">61 lượt tym</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
         </>
     );
 };
