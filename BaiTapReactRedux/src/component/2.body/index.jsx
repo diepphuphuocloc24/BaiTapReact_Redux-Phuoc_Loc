@@ -436,7 +436,7 @@ const BodyComponent = () => {
                         <div className="flex-1">
                             <textarea
                                 rows={2}
-                                className="w-full text-sm text-gray-800 resize-none border border-gray-300 rounded-2xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm"
+                                className="w-full text-sm text-gray-800 resize-none border border-gray-300 rounded-2xl p-3 focus:outline-none focus:ring-2 focus:ring-green-600 shadow-sm"
                                 placeholder="Viết bình luận...">
                                 FLop quá thì ghi tên anh vào
                             </textarea>
